@@ -1,21 +1,35 @@
 #!/bin/bash
-#
+# Forked from
 # imgupr // imgur uploader
 # (c) 2012, Vid Maric // esdf
-# Edited by Ben Bristow
+
+# ImgScrot by Ben Bristow
 # http://www.benbristow.co.uk/
 
+#Take screenshot
 echo "Click and drag your mouse to select screenshot area"
 scrot -s $HOME/imguprscreenshot.png
 
-
+#Set Variables
 screenshot=$HOME/imguprscreenshot.png
 apikey=7f0214864ecf8fd7e316d5feba701eef
 tmpfile=$HOME/.imguprtemp
 
+#Upload Image
 curl -s -F "image=@$screenshot" -F "key=$apikey" http://api.imgur.com/2/upload.xml > $tmpfile
+
+#Image links
 printf "Image link: "; sed -n -e 's/.*<original>\(.*\)<\/original>.*/\1/p' $tmpfile
 printf "Delete link: "; sed -n -e 's/.*<delete_page>\(.*\)<\/delete_page>.*/\1/p' $tmpfile
 
+#Prompt to xclip
+read -p "Do you wish to copy the image link to your clipboard? (Requires xclip installed)? (Y/n)" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    sed -n -e 's/.*<original>\(.*\)<\/original>.*/\1/p' $tmpfile | xclip -selection c
+    echo "Copied link to clipboard"
+fi
+
+#Delete leftover files
 rm $tmpfile
 rm $screenshot
