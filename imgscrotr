@@ -5,13 +5,15 @@
 # Edited by Ben Bristow
 # http://www.benbristow.co.uk/
 
-scrot $HOME/imguprscreenshot.png
+echo "Click and drag your mouse to select screenshot area"
+scrot -s $HOME/imguprscreenshot.png
+
+
 screenshot=$HOME/imguprscreenshot.png
 apikey=7f0214864ecf8fd7e316d5feba701eef
 tmpfile=$HOME/.imguprtemp
 
 curl -s -F "image=@$screenshot" -F "key=$apikey" http://api.imgur.com/2/upload.xml > $tmpfile
-
 printf "Image link: "; sed -n -e 's/.*<original>\(.*\)<\/original>.*/\1/p' $tmpfile
 printf "Delete link: "; sed -n -e 's/.*<delete_page>\(.*\)<\/delete_page>.*/\1/p' $tmpfile
 
