@@ -1,4 +1,4 @@
-Imgscrottr
+Imgscrotr
 =============
 
 Fork of Vid Maric's (esdf) imgupr script, but rather than specifying
