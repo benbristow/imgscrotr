@@ -22,13 +22,8 @@ curl -s -F "image=@$screenshot" -F "key=$apikey" http://api.imgur.com/2/upload.x
 printf "Image link: "; sed -n -e 's/.*<original>\(.*\)<\/original>.*/\1/p' $tmpfile
 printf "Delete link: "; sed -n -e 's/.*<delete_page>\(.*\)<\/delete_page>.*/\1/p' $tmpfile
 
-#Prompt to xclip
-read -p "Do you wish to copy the image link to your clipboard? (Requires xclip installed)? (Y/n)" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    sed -n -e 's/.*<original>\(.*\)<\/original>.*/\1/p' $tmpfile | xclip -selection c
-    echo "Copied link to clipboard"
-fi
+#Copy to clipboard
+sed -n -e 's/.*<original>\(.*\)<\/original>.*/\1/p' $tmpfile | xclip -selection c
 
 #Delete leftover files
 rm $tmpfile
